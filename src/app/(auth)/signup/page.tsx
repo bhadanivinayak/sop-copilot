@@ -47,7 +47,8 @@ export default function SignupPage() {
 
     if (data.user) {
       // Create company
-      const { data: company, error: companyError } = await supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const { data: company, error: companyError } = await (supabase as any)
         .from('companies')
         .insert({ name: form.companyName, industry: form.industry, size: form.size })
         .select()
