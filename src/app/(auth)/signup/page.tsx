@@ -58,12 +58,13 @@ export default function SignupPage() {
     }
 
     if (data.user) {
+      // Generate company ID client-side to avoid RLS chicken-and-egg on SELECT
+      const companyId = crypto.randomUUID()
+
       // 2. Create company row
-      const { data: company, error: companyError } = await supabase
+      const { error: companyError } = await supabase
         .from('companies')
-        .insert({ name: form.companyName, industry: form.industry || null, size: form.size || null })
-        .select()
-        .single()
+        .insert({ id: companyId, name: form.companyName, industry: form.industry || null, size: form.size || null })
 
       if (companyError) {
         toast.error(`Company setup failed: ${companyError.message}`)
@@ -72,17 +73,15 @@ export default function SignupPage() {
       }
 
       // 3. Link profile → company
-      if (company) {
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .update({ company_id: company.id, full_name: form.fullName, onboarded: true })
-          .eq('id', data.user.id)
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ company_id: companyId, full_name: form.fullName, onboarded: true })
+        .eq('id', data.user.id)
 
-        if (profileError) {
-          toast.error(`Profile update failed: ${profileError.message}`)
-          setLoading(false)
-          return
-        }
+      if (profileError) {
+        toast.error(`Profile update failed: ${profileError.message}`)
+        setLoading(false)
+        return
       }
     }
 
