@@ -31,7 +31,8 @@ export default function SignupPage() {
   async function handleSignup(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
-    const supabase = createClient()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const supabase = createClient() as any
 
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
@@ -47,8 +48,7 @@ export default function SignupPage() {
 
     if (data.user) {
       // Create company
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: company, error: companyError } = await (supabase as any)
+      const { data: company, error: companyError } = await supabase
         .from('companies')
         .insert({ name: form.companyName, industry: form.industry, size: form.size })
         .select()
