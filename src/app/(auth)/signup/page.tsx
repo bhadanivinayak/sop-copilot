@@ -137,7 +137,7 @@ export default function SignupPage() {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label className="text-slate-300">Industry</Label>
-                <Select onValueChange={v => updateForm('industry', v)}>
+                <Select onValueChange={(v: string | null) => updateForm('industry', v ?? '')}>
                   <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
                     <SelectValue placeholder="Select..." />
                   </SelectTrigger>
@@ -153,7 +153,7 @@ export default function SignupPage() {
               </div>
               <div className="space-y-2">
                 <Label className="text-slate-300">Company Size</Label>
-                <Select onValueChange={v => updateForm('size', v)}>
+                <Select onValueChange={(v: string | null) => updateForm('size', v ?? '')}>
                   <SelectTrigger className="bg-slate-700 border-slate-600 text-white">
                     <SelectValue placeholder="Select..." />
                   </SelectTrigger>
